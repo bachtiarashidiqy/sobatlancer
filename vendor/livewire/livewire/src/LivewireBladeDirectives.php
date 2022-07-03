@@ -45,24 +45,16 @@ EOT;
 
     public static function livewire($expression)
     {
-        $cachedKey = "'" . Str::random(7) . "'";
+        $lastArg = str(last(explode(',', $expression)))->trim();
 
-        // If we are inside a Livewire component, we know we're rendering a child.
-        // Therefore, we must create a more deterministic view cache key so that
-        // Livewire children are properly tracked across load balancers.
-        if (LivewireManager::$currentCompilingViewPath !== null) {
-            // $cachedKey = '[hash of Blade view path]-[current @livewire directive count]'
-            $cachedKey = "'l" . crc32(LivewireManager::$currentCompilingViewPath) . "-" . LivewireManager::$currentCompilingChildCounter . "'";
-
-            // We'll increment count, so each cache key inside a compiled view is unique.
-            LivewireManager::$currentCompilingChildCounter++;
-        } 
-
-        $pattern = "/,\s*?key\(([\s\S]*)\)/"; //everything between ",key(" and ")"
-        $expression = preg_replace_callback($pattern, function ($match) use (&$cachedKey) {
-            $cachedKey = trim($match[1]) ?: $cachedKey;
-            return "";
-        }, $expression);
+        if ($lastArg->startsWith('key(') && $lastArg->endsWith(')')) {
+            $cachedKey = $lastArg->replaceFirst('key(', '')->replaceLast(')', '');
+            $args = explode(',', $expression);
+            array_pop($args);
+            $expression = implode(',', $args);
+        } else {
+            $cachedKey = "'".str()->random(7)."'";
+        }
 
         return <<<EOT
 <?php

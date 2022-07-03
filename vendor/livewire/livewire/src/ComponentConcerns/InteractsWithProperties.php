@@ -171,16 +171,6 @@ trait InteractsWithProperties
             $this->{$property} = $freshInstance->{$property};
         }
     }
-    
-    protected function resetExcept(...$properties)
-    {
-        if (count($properties) && is_array($properties[0])) {
-            $properties = $properties[0];
-        }
-
-        $keysToReset = array_diff(array_keys($this->getPublicPropertiesDefinedBySubClass()), $properties);
-        $this->reset($keysToReset);
-    }
 
     public function only($properties)
     {
@@ -191,15 +181,5 @@ trait InteractsWithProperties
         }
 
         return $results;
-    }
-    
-    public function except($properties)
-    {
-        return array_diff_key($this->all(), array_flip($properties));
-    }
-
-    public function all()
-    {
-       return $this->getPublicPropertiesDefinedBySubClass();
     }
 }

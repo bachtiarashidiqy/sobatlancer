@@ -267,8 +267,7 @@ EOF;
     public function assertRedirect($uri = null)
     {
         PHPUnit::assertTrue(
-            $this->isRedirect(),
-            $this->statusMessageWithDetails('201, 301, 302, 303, 307, 308', $this->getStatusCode()),
+            $this->isRedirect(), 'Response status code ['.$this->getStatusCode().'] is not a redirect status code.'
         );
 
         if (! is_null($uri)) {
@@ -287,8 +286,7 @@ EOF;
     public function assertRedirectContains($uri)
     {
         PHPUnit::assertTrue(
-            $this->isRedirect(),
-            $this->statusMessageWithDetails('201, 301, 302, 303, 307, 308', $this->getStatusCode()),
+            $this->isRedirect(), 'Response status code ['.$this->getStatusCode().'] is not a redirect status code.'
         );
 
         PHPUnit::assertTrue(
@@ -312,8 +310,7 @@ EOF;
         }
 
         PHPUnit::assertTrue(
-            $this->isRedirect(),
-            $this->statusMessageWithDetails('201, 301, 302, 303, 307, 308', $this->getStatusCode()),
+            $this->isRedirect(), 'Response status code ['.$this->getStatusCode().'] is not a redirect status code.'
         );
 
         $request = Request::create($this->headers->get('Location'));
@@ -1491,17 +1488,11 @@ EOF;
             PHPUnit::fail('The response is not a streamed response.');
         }
 
-        ob_start(function (string $buffer): string {
-            $this->streamedContent .= $buffer;
-
-            return '';
-        });
+        ob_start();
 
         $this->sendContent();
 
-        ob_end_clean();
-
-        return $this->streamedContent;
+        return $this->streamedContent = ob_get_clean();
     }
 
     /**

@@ -19,17 +19,9 @@ class MakeCommand extends FileManipulationCommand
             $this->option('stub')
         );
 
-        if (!$this->isClassNameValid($name = $this->parser->className())) {
-            $this->line("<options=bold,reverse;fg=red> WHOOPS! </> 😳 \n");
-            $this->line("<fg=red;options=bold>Class is invalid:</> {$name}");
-
-            return;
-        }
-
-        if ($this->isReservedClassName($name)) {
+        if($this->isReservedClassName($name = $this->parser->className())) {
             $this->line("<options=bold,reverse;fg=red> WHOOPS! </> 😳 \n");
             $this->line("<fg=red;options=bold>Class is reserved:</> {$name}");
-
             return;
         }
 
@@ -122,11 +114,6 @@ class MakeCommand extends FileManipulationCommand
         return $testPath;
     }
 
-    public function isClassNameValid($name)
-    {
-        return preg_match("/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/", $name);
-    }
-    
     public function isReservedClassName($name)
     {
         return array_search(strtolower($name), $this->getReservedName()) !== false;

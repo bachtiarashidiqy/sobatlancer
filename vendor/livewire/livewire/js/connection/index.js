@@ -3,28 +3,20 @@ import componentStore from '../Store'
 import { getCsrfToken } from '@/util'
 
 export default class Connection {
-    constructor() {
-        this.headers = {}
-    }
-
     onMessage(message, payload) {
         message.component.receiveMessage(message, payload)
     }
 
-    onError(message, status, response) {
+    onError(message, status) {
         message.component.messageSendFailed()
 
-        return componentStore.onErrorCallback(status, response)
+        return componentStore.onErrorCallback(status)
     }
 
-    showExpiredMessage(response, message) {
-        if (store.sessionHasExpiredCallback) {
-            store.sessionHasExpiredCallback(response, message)
-        } else {
-            confirm(
-                'This page has expired.\nWould you like to refresh the page?'
-            ) && window.location.reload()
-        }
+    showExpiredMessage() {
+        confirm(
+            'This page has expired due to inactivity.\nWould you like to refresh the page?'
+        ) && window.location.reload()
     }
 
     sendMessage(message) {
@@ -49,9 +41,6 @@ export default class Connection {
                     'Accept': 'text/html, application/xhtml+xml',
                     'X-Livewire': true,
 
-                    // set Custom Headers
-                    ...(this.headers),
-
                     // We'll set this explicitly to mitigate potential interference from ad-blockers/etc.
                     'Referer': window.location.href,
                     ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }),
@@ -70,14 +59,14 @@ export default class Connection {
                         }
                     })
                 } else {
-                    if (this.onError(message, response.status, response) === false) return
+                    if (this.onError(message, response.status) === false) return
 
                     if (response.status === 419) {
                         if (store.sessionHasExpired) return
 
                         store.sessionHasExpired = true
 
-                        this.showExpiredMessage(response, message)
+                        this.showExpiredMessage()
                     } else {
                         response.text().then(response => {
                             this.showHtmlModal(response)

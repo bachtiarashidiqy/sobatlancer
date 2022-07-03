@@ -1,14 +1,14 @@
 <section
-    class="h-full w-full border-box transition-all duration-500 linear lg:px-16 md:px-20 px-8 py-8 bg-white">
-    <div class="navbar-1-1" style="font-family: 'Poppins', sans-serif">
+    class="h-1 w-full border-box transition-all duration-500 linear lg:px-14 md:px-20 px-8 py-0.5 bg-white" style="background-color: #EDF1FF">
+    <div class="navbar-1-1" style="font-family: 'Inter', sans-serif">
         <div class=" mx-auto flex flex-wrap flex-row items-center justify-between">
 
-            <a href="{{ route('index') }}" class="flex text-3xl font-bold items-center">
-                SOBATLANCER
+            <a href="{{ route('index') }}" class="flex text-3xl font-bold items-center logo-app">
+                <img src="{{ asset('/assets/images/Logo.svg') }}" alt="" class="object-center mx-auto my-8 " width="200px">
             </a>
 
             <label for="menu-toggle" class="cursor-pointer lg:hidden block">
-                <svg class="w-6 h-6" fill="none" stroke="#092A33" viewBox="0 0 24 24"
+                <svg class="w-6 h-3" fill="none" stroke="#092A33" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6h16M4 12h16M4 18h16">
@@ -18,7 +18,7 @@
 
             <input class="hidden" type="checkbox" id="menu-toggle" />
 
-            <div class="hidden lg:flex lg:items-center lg:w-auto w-full lg:ml-auto lg:mr-auto flex-wrap items-center text-base justify-center"
+            <div class="hidden lg:flex lg:items-center lg:w-auto w-full lg:ml-auto lg:mr-auto flex-wrap items-center text-base justify-center" style="font-weight: 400"
                 id="menu">
                 <nav
                     class="lg:space-x-12 space-x-0 lg:flex items-center justify-between text-base pt-8 lg:pt-0 lg:space-y-0 space-y-6">
@@ -45,23 +45,24 @@
             @guest
                 <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
                     <button
-                        onclick="toggleModal('loginModal')"
+                        onclick="toggleModal('registerModal')"
                         class="text-serv-login-text items-center border-0 block lg:inline-block lg:py-3 lg:px-10 focus:outline-none rounded-2xl font-medium text-base mt-6 lg:mt-0">
-                        Log In
+                        Sign Up
                     </button>
 
                     <button
-                        onclick="toggleModal('registerModal')"
+                        onclick="toggleModal('loginModal')"
                         class="lg:bg-serv-services-bg text-serv-login-text items-center border-0 block lg:inline-block  lg:py-3 lg:px-10 focus:outline-none rounded-2xl font-medium text-base mt-6 lg:mt-0">
-                        Sign Up
+                        Log In
                     </button>
+
                 </div>
             @endguest
 
             @auth
                 <div @click.away="open = false" class="hidden lg:block relative" x-data="{ open: false }">
 
-                    <button @click="open = !open" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                    <button @click="open = !open" style="font-weight: 700" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
 
                         Halo, {{ Auth::user()->name; }}
 

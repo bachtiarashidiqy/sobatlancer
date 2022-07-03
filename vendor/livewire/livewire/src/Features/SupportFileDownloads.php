@@ -2,7 +2,6 @@
 
 namespace Livewire\Features;
 
-use Illuminate\Contracts\Support\Responsable;
 use Livewire\Livewire;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -17,10 +16,6 @@ class SupportFileDownloads
     function __construct()
     {
         Livewire::listen('action.returned', function ($component, $action, $returned) {
-            if($returned instanceof Responsable){
-                $returned = $returned->toResponse(request());
-            }
-
             if ($this->valueIsntAFileResponse($returned)) return;
 
             $response = $returned;
@@ -40,6 +35,8 @@ class SupportFileDownloads
                 'content' => $content,
                 'contentType' => $response->headers->get('Content-Type'),
             ];
+
+            $component->skipRender();
         });
 
         Livewire::listen('component.dehydrate.subsequent', function ($component, $response) {

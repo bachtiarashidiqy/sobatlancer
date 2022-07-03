@@ -1,10 +1,5 @@
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue';
-</script>
-
 <template>
-    <AppLayout title="Create Team">
+    <app-layout title="Create Team">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Create Team
@@ -13,8 +8,21 @@ import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue';
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <CreateTeamForm />
+                <create-team-form />
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>
+
+<script>
+    import { defineComponent } from 'vue'
+    import AppLayout from '@/Layouts/AppLayout.vue'
+    import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue'
+
+    export default defineComponent({
+        components: {
+            AppLayout,
+            CreateTeamForm,
+        },
+    })
+</script>

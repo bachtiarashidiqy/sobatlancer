@@ -25,12 +25,8 @@ class SupportBrowserHistory
 
             $queryParams = request()->query();
 
-            foreach ($component->getQueryString() ?? [] as $property => $options) {
-                if (!is_array($options)) {
-                    $property = $options;
-                }
-
-                $fromQueryString = Arr::get($queryParams, $options['as'] ?? $property);
+            foreach ($properties as $property) {
+                $fromQueryString = Arr::get($queryParams, $property);
 
                 if ($fromQueryString === null) {
                     continue;
@@ -131,7 +127,7 @@ class SupportBrowserHistory
     {
         if (empty($referer = request()->header('Referer'))) return [];
 
-        parse_str((string) parse_url($referer, PHP_URL_QUERY), $refererQueryString);
+        parse_str(parse_url($referer, PHP_URL_QUERY), $refererQueryString);
 
         return $refererQueryString;
     }
@@ -182,7 +178,6 @@ class SupportBrowserHistory
                 return isset($value['except']);
             })
             ->mapWithKeys(function ($value, $key) {
-                $key = $value['as'] ?? $key;
                 return [$key => $value['except']];
             });
     }
@@ -192,9 +187,8 @@ class SupportBrowserHistory
         return collect($component->getQueryString())
             ->mapWithKeys(function($value, $key) use ($component) {
                 $key = is_string($key) ? $key : $value;
-                $alias = $value['as'] ?? $key;
 
-                return [$alias => $component->{$key}];
+                return [$key => $component->{$key}];
             });
     }
 
